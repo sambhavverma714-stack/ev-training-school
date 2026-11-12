@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard · EV Training School</title>
+  <script src="js/common.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="index.html">⚡ EV Training School</a>
+    <div class="nav-links" id="navLinks"></div>
+  </nav>
+
+  <div class="dashboard">
+    <aside class="sidebar">
+      <button class="side-link" data-panel="overview" type="button">Overview</button>
+      <button class="side-link" data-panel="courses" type="button">My courses</button>
+      <button class="side-link" data-panel="bookings" type="button">Lab bookings</button>
+      <button class="side-link" data-panel="certificates" type="button">Certificates</button>
+      <button class="side-link hidden" id="adminLink" data-panel="admin" type="button">Admin</button>
+    </aside>
+
+    <main class="dashboard-main">
+      <div class="panel-head">
+        <h1 id="greeting">Dashboard</h1>
+      </div>
+      <div id="pageAlert"></div>
+
+      <section class="panel" id="panel-overview">
+        <div class="stat-grid" id="statGrid"></div>
+        <p class="muted">Use the menu to continue your courses, book a workshop lab session, or view your certificates.</p>
+      </section>
+
+      <section class="panel hidden" id="panel-courses">
+        <div class="panel-head"><h2>My courses</h2></div>
+        <div class="list" id="courseList"></div>
+      </section>
+
+      <section class="panel hidden" id="panel-bookings">
+        <div class="panel-head"><h2>My lab sessions</h2></div>
+        <div id="bookingAlert"></div>
+        <div class="list" id="myBookings"></div>
+
+        <div class="panel-head"><h2>Available sessions</h2></div>
+        <div class="list" id="slotList"></div>
+      </section>
+
+      <section class="panel hidden" id="panel-certificates">
+        <div class="panel-head"><h2>My certificates</h2></div>
+        <div class="list" id="certList"></div>
+      </section>
+
+      <section class="panel hidden" id="panel-admin">
+        <div class="panel-head"><h2>Create a lab session</h2></div>
+        <div id="adminAlert"></div>
+        <form id="slotForm" class="card form">
+          <label>
+            Course
+            <select name="courseId" required></select>
+          </label>
+          <div class="form-row">
+            <label>
+              Lab name
+              <input type="text" name="labName" required>
+            </label>
+            <label>
+              Location
+              <input type="text" name="location" required placeholder="Bay 1 - Training Workshop">
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              Start date and time
+              <input type="datetime-local" name="startsAt" required>
+            </label>
+            <label>
+              Seats
+              <input type="number" name="capacity" min="1" max="100" value="6" required>
+            </label>
+          </div>
+          <button class="btn btn-primary" type="submit">Create session</button>
+        </form>
+
+        <div class="panel-head"><h2>All sessions</h2></div>
+        <div class="list" id="adminSlotList"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+    Course content should be reviewed by a qualified HV safety instructor before use in a real workshop.
+  </footer>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

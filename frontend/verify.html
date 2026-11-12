@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Certificate · EV Training School</title>
+  <script src="js/common.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="index.html">⚡ EV Training School</a>
+    <div class="nav-links" id="navLinks"></div>
+  </nav>
+
+  <main class="container">
+    <section class="card verify-box no-print">
+      <h1>Verify a certificate</h1>
+      <p class="muted">Enter the certificate ID shown on the certificate, for example EVT-2025-A3F9C1.</p>
+      <form id="verifyForm" class="form">
+        <label>
+          Certificate ID
+          <input type="text" name="id" required autocomplete="off" placeholder="EVT-2025-XXXXXX">
+        </label>
+        <button class="btn btn-primary btn-block" type="submit">Verify certificate</button>
+      </form>
+    </section>
+
+    <div id="verifyResult" class="verify-result"></div>
+  </main>
+
+  <footer class="footer">
+    Course content should be reviewed by a qualified HV safety instructor before use in a real workshop.
+  </footer>
+
+  <script src="js/verify.js"></script>
+</body>
+</html>

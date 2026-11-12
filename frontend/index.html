@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EV Training School</title>
+  <script src="js/common.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a class="brand" href="index.html">⚡ EV Training School</a>
+    <div class="nav-links" id="navLinks"></div>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <span class="eyebrow">High-voltage EV maintenance training</span>
+      <h1>Learn to service EV batteries, inverters and drive motors safely.</h1>
+      <p>Complete interactive modules, pass a safety assessment, earn a verifiable certificate, and book hands-on workshop lab time.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#courses">Browse courses</a>
+        <a class="btn btn-outline" href="verify.html">Verify a certificate</a>
+      </div>
+    </section>
+
+    <section class="card welcome-card hidden" id="welcomeCard">
+      <h2 id="welcomeText">Welcome back.</h2>
+      <p class="muted">Pick up where you left off, book a lab session, or check your certificates.</p>
+      <a class="btn btn-primary" href="dashboard.html">Go to my dashboard</a>
+    </section>
+
+    <section class="card auth-section" id="authSection">
+      <div class="tabs">
+        <button class="tab active" data-tab="login" type="button">Log in</button>
+        <button class="tab" data-tab="register" type="button">Register</button>
+      </div>
+
+      <div id="authAlert"></div>
+
+      <form id="loginForm" class="form">
+        <label>
+          Email
+          <input type="email" name="email" required autocomplete="email">
+        </label>
+        <label>
+          Password
+          <input type="password" name="password" required autocomplete="current-password">
+        </label>
+        <button class="btn btn-primary btn-block" type="submit">Log in</button>
+      </form>
+
+      <form id="registerForm" class="form hidden">
+        <label>
+          Full name
+          <input type="text" name="name" required autocomplete="name">
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" required autocomplete="email">
+        </label>
+        <label>
+          Password
+          <input type="password" name="password" required minlength="8" autocomplete="new-password">
+          <span class="hint">At least 8 characters.</span>
+        </label>
+        <button class="btn btn-primary btn-block" type="submit">Create account</button>
+      </form>
+
+      <p class="demo-note">Demo admin: admin@evschool.com / Admin123!</p>
+    </section>
+
+    <section class="section" id="courses">
+      <div class="section-head">
+        <h2>Course catalogue</h2>
+        <p>Each course has training modules followed by a graded assessment. You need 80% to pass.</p>
+      </div>
+      <div class="grid" id="courseGrid">
+        <p class="muted">Loading courses...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Course content should be reviewed by a qualified HV safety instructor before use in a real workshop.
+  </footer>
+
+  <script src="js/index.js"></script>
+</body>
+</html>
