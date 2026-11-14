@@ -130,6 +130,40 @@ router.get('/me', authRequired, (req, res) => {
   res.json({ bookings });
 });
 
+// GET /api/bookings/admin/all  (admin only)
+router.get('/admin/all', authRequired, adminOnly, (req, res) => {
+  const data = db.read();
+  const bookings = data.bookings
+    .map(b => {
+      const user = data.users.find(u => u.id === b.userId);
+      return {
+        ...bookingView(data, b),
+        studentName: user ? user.name : 'Unknown',
+        studentEmail: user ? user.email : ''
+      };
+    })
+    .sort((a, b) => (a.startsAt || '').localeCompare(b.startsAt || ''));
+  res.json({ bookings });
+});
+
+// DELETE /api/bookings/slots/:id  (admin only)
+// Removes a lab session and cancels any bookings for it.
+router.delete('/slots/:id', authRequired, adminOnly, (req, res) => {
+  const data = db.read();
+  const slot = data.slots.find(s => s.id === req.params.id);
+
+  if (!slot) {
+    return res.status(404).json({ error: 'Lab session not found' });
+  }
+
+  const removedBookings = data.bookings.filter(b => b.slotId === slot.id).length;
+  data.bookings = data.bookings.filter(b => b.slotId !== slot.id);
+  data.slots = data.slots.filter(s => s.id !== slot.id);
+  db.write(data);
+
+  res.json({ message: 'Lab session deleted', removedBookings });
+});
+
 // DELETE /api/bookings/:id
 // Students can cancel their own booking before the session starts.
 // Admins can cancel any booking.

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: ev-training-school
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CERT_SECRET
+        generateValue: true
+      # PORT is provided by Render automatically; the app uses it.
+    autoDeploy: true

@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupSidebar();
   setupBookingActions();
   setupAdminForm();
+  setupAdminActions();
   loadDashboard();
   loadSlots();
   if (isAdmin()) loadCourseOptions();
@@ -107,6 +108,7 @@ function statusBadge(p) {
 }
 
 function renderCourses(progress) {
+  if (isAdmin()) loadAdminBookings();
   document.getElementById('courseList').innerHTML = progress.map(p => {
     const pct = p.totalModules ? Math.round((p.completedModules / p.totalModules) * 100) : 0;
     return `
@@ -193,7 +195,10 @@ function renderAdminSlots(slots) {
           <div class="item-title">${escapeHtml(s.labName)} · ${escapeHtml(s.courseTitle)}</div>
           <div class="item-sub">${escapeHtml(s.location)} · ${escapeHtml(formatDate(s.startsAt))}</div>
         </div>
-        <span class="badge badge-info">${booked} / ${s.capacity} booked${s.started ? ' · started' : ''}</span>
+        <div class="hero-actions">
+          <span class="badge badge-info">${booked} / ${s.capacity} booked${s.started ? ' · started' : ''}</span>
+          <button class="btn btn-outline btn-small" data-delete-slot="${escapeHtml(s.id)}" type="button">Delete</button>
+        </div>
       </div>
     `;
   }).join('');
@@ -255,6 +260,56 @@ async function cancelBooking(button) {
 }
 
 // ---------- Admin ----------
+async function loadAdminBookings() {
+  if (!isAdmin()) return;
+  try {
+    const { bookings } = await api('/bookings/admin/all');
+    renderAdminBookings(bookings);
+  } catch (err) {
+    showAlert('adminAlert', 'Could not load bookings: ' + err.message);
+  }
+}
+
+function renderAdminBookings(bookings) {
+  const container = document.getElementById('adminBookingList');
+  if (!container) return;
+  if (!bookings.length) {
+    container.innerHTML = emptyBox('No bookings yet.');
+    return;
+  }
+
+  container.innerHTML = bookings.map(b => `
+    <div class="list-item">
+      <div>
+        <div class="item-title">${escapeHtml(b.studentName)} · ${escapeHtml(b.labName)}</div>
+        <div class="item-sub">${escapeHtml(b.courseTitle)} · ${escapeHtml(formatDate(b.startsAt))}</div>
+        <div class="item-sub">${escapeHtml(b.studentEmail || '')}</div>
+      </div>
+      <span class="badge ${b.started ? '' : 'badge-info'}">${b.started ? 'Started' : 'Upcoming'}</span>
+    </div>
+  `).join('');
+}
+
+function setupAdminActions() {
+  if (!isAdmin()) return;
+  document.getElementById('adminSlotList').addEventListener('click', async (event) => {
+    const button = event.target.closest('[data-delete-slot]');
+    if (!button) return;
+
+    if (!confirm('Delete this lab session? Any bookings for it will also be cancelled.')) return;
+    clearAlert('adminAlert');
+    try {
+      await withBusy(button, 'Deleting...', () =>
+        api(`/bookings/slots/${encodeURIComponent(button.dataset.deleteSlot)}`, { method: 'DELETE' })
+      );
+      showAlert('adminAlert', 'Lab session deleted.', 'success');
+      await refreshBookings();
+    } catch (err) {
+      showAlert('adminAlert', err.message);
+    }
+  });
+}
+
 async function loadCourseOptions() {
   try {
     const { courses } = await api('/courses');
@@ -297,6 +352,7 @@ function setupAdminForm() {
       form.reset();
       showAlert('adminAlert', 'Lab session created.', 'success');
       await loadSlots();
+      if (isAdmin()) await loadAdminBookings();
     } catch (err) {
       showAlert('adminAlert', err.message);
     }

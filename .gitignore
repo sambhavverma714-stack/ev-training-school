@@ -2,3 +2,5 @@ node_modules/
 backend/data/
 backend/.env
 .DS_Store
+*.pptx
+*.zip
